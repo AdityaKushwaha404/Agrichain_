@@ -13,7 +13,7 @@ import Contact from '../components/Contact.jsx';
 
 const LandingPage = () => {
 	const location = useLocation();
-	// Ensure reload without hash shows hero (top) instead of last scroll position retained by browser
+	// Ensure reload without hash shows hero (top) instead of last scroll position retained by browser...
 	useEffect(() => {
 		if ('scrollRestoration' in window.history) {
 			window.history.scrollRestoration = 'manual';
