@@ -3,7 +3,7 @@ import contract from '../blockchain/agritrace.js';
 
 const router = express.Router();
 
-// Post a price for a batch on the blockchain
+// Post a price for a batch on the blockchain.
 router.post('/actions/price', async (req, res) => {
   try {
     const { batchId, priceWei, noteCID } = req.body;
