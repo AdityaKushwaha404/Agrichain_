@@ -3,7 +3,7 @@ import Produce from '../models/Produce.js';
 
 const router = express.Router();
 
-// Add new produce
+// Add new produce.
 router.post('/', async (req, res) => {
   try {
     const produce = new Produce(req.body);
