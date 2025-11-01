@@ -9,24 +9,31 @@ import produceRoutes from './routes/produce.js';
 import blockchainRoutes from './routes/blockchain.js';
 import blockchainActions from './routes/blockchainActions.js';
 import aiRoutes from './routes/ai.js';
+import authRoutes from './routes/auth.routes.js';
+import transferRoutes from './routes/transferRoutes.js';
+import bodyParser from 'body-parser';
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 // Attach Clerk auth (verifies tokens and sets req.auth). Safe if CLERK_SECRET_KEY is set.
 try {
   app.use(ClerkExpressWithAuth());
 } catch (e) {
   console.warn('[Clerk] Middleware not initialized:', e?.message);
 }
+// Routes
 app.use('/api/roles', rolesRoutes);
 app.use('/api/produce', produceRoutes);
 app.use('/api/blockchain', blockchainRoutes);
+app.use('/api/transfer', transferRoutes);
 app.use('/api/ai', aiRoutes);
 
 app.use('/api/ml', mlRoutes);
+app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/agritrace';
