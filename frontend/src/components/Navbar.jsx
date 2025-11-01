@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
+import BlackboxCopilot from './BlackboxCopilot';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const navLinks = [
@@ -11,6 +13,7 @@ const navLinks = [
 const Navbar = () => {
 	const [scrolled, setScrolled] = useState(false);
 	const [active, setActive] = useState("Home");
+	const [copilotOpen, setCopilotOpen] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -121,7 +124,7 @@ const Navbar = () => {
 						</a>
 					))}
 				</div>
-				<div className="ml-4">
+				<div className="ml-4 flex items-center gap-3">
 					<button
 						className="hero-btn-gradient-border relative font-semibold py-2 px-7 rounded-full shadow-lg transition duration-300 text-white overflow-hidden focus:outline-none text-base scale-100 hover:scale-105"
 						onClick={(e) => { handleRipple(e); navigate('/transparency'); }}
@@ -129,8 +132,41 @@ const Navbar = () => {
 						<span className="relative z-10">Explore Now</span>
 						<span className="hero-btn-border absolute inset-0 rounded-full pointer-events-none"></span>
 					</button>
+
+					{/* Ask AI trigger */}
+					<button
+						className="relative font-semibold py-2 px-6 rounded-full border border-emerald-200 text-emerald-800 bg-emerald-50 hover:bg-emerald-100 transition"
+						onClick={() => setCopilotOpen(true)}
+					>
+						Ask AI
+					</button>
+
+					{/* Auth controls */}
+					<SignedOut>
+						<SignInButton mode="modal" afterSignInUrl="/" afterSignUpUrl="/">
+							<button
+								aria-label="Log in"
+								onClick={handleRipple}
+								className="login-btn relative overflow-hidden rounded-full px-6 py-2 font-semibold text-gray-800 focus:outline-none transition-all duration-300"
+							>
+								<span className="relative z-10 flex items-center gap-2">
+									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-80">
+										<path d="M8 10V7a4 4 0 1 1 8 0v3" stroke="#0f766e" strokeWidth="1.8" strokeLinecap="round"/>
+										<rect x="5" y="10" width="14" height="10" rx="3" stroke="#22c55e" strokeWidth="1.8"/>
+									</svg>
+									<span>Log in</span>
+								</span>
+								<span className="login-btn-border absolute inset-0 rounded-full pointer-events-none" />
+								<span className="login-btn-glow absolute inset-0 rounded-full pointer-events-none" />
+							</button>
+						</SignInButton>
+					</SignedOut>
+					<SignedIn>
+						<UserButton afterSignOutUrl="/" appearance={{ elements: { userButtonAvatarBox: 'ring-2 ring-teal-400' } }} />
+					</SignedIn>
 				</div>
 			</div>
+			<BlackboxCopilot open={copilotOpen} onClose={() => setCopilotOpen(false)} />
 			<style>{`
 				.nav-link { overflow: hidden; }
 				.nav-underline { position: absolute; left:0; bottom:0; width:0%; height:2px; background: linear-gradient(90deg,#22c55e,#2dd4bf,#14b8a6); transition: width .35s cubic-bezier(.4,0,.2,1), height .2s; }
@@ -140,6 +176,14 @@ const Navbar = () => {
 				.hero-btn-border { content:''; display:block; border-radius:9999px; padding:2px; background:linear-gradient(270deg,#22c55e,#2dd4bf,#14b8a6,#22c55e); background-size:400% 400%; z-index:1; animation:borderGradientMove 4s linear infinite; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; transition:filter .18s, box-shadow .18s; }
 				.hero-btn-gradient-border:hover { background:linear-gradient(270deg,#22c55e,#2dd4bf,#14b8a6,#22c55e); background-size:400% 400%; animation:btnFillGradientMove 2.5s linear infinite; transform:scale(1.06); box-shadow:0 0 0 4px #2dd4bf33,0 4px 32px 0 #2dd4bf66,0 0 8px 2px #fff8; }
 				.hero-btn-gradient-border:hover .hero-btn-border { filter:brightness(1.15) drop-shadow(0 0 12px #2dd4bfcc); }
+
+				/* Login button with translucent pill + animated gradient border */
+				.login-btn { background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,255,255,0.6)); box-shadow: 0 10px 24px -14px rgba(16,185,129,0.35), inset 0 1px 0 0 rgba(255,255,255,0.8); backdrop-filter: blur(8px); }
+				.login-btn:hover { transform: translateY(-1px); }
+				.login-btn:active { transform: translateY(0); }
+				.login-btn-border { content:''; display:block; border-radius:9999px; padding:1.5px; background:linear-gradient(120deg,#94f2c0,#2dd4bf,#22c55e,#94f2c0); background-size:300% 300%; animation:borderGradientMove 6s linear infinite; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+				.login-btn-glow { opacity:0; box-shadow:0 6px 30px -10px rgba(45,212,191,0.5), 0 0 0 1px rgba(20,184,166,0.12) inset; transition: opacity .25s ease; }
+				.login-btn:hover .login-btn-glow { opacity:1; }
 				@keyframes btnFillGradientMove { 0% {background-position:0% 50%;} 100% {background-position:100% 50%;} }
 				@keyframes borderGradientMove { 0% {background-position:0% 50%;} 100% {background-position:100% 50%;} }
 				@keyframes rippleEffect { 0% {opacity:.7;width:10px;height:10px;} 80% {opacity:.3;width:120px;height:120px;} 100% {opacity:0;width:160px;height:160px;} }

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@clerk/clerk-react": "^5.53.4",
     "axios": "^1.6.0",
     "ethers": "^6.0.0",
     "framer-motion": "^10.18.0",

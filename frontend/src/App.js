@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
 import LandingPage from './pages/LandingPage';
 import TransparencyPage from './pages/TransparencyPage';
 import SupplyChainDashboard from './pages/SupplyChainDashboard';
@@ -52,17 +53,77 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/transparency" element={<SupplyChainDashboard />} />
-        <Route path="/transparency/legacy" element={<TransparencyPage />} />
-        <Route path="/transparency/batch-management" element={<BatchManagementPage />} />
-        <Route path="/transparency/traceability" element={<TraceabilityExplorerPage />} />
-        <Route path="/transparency/transfers" element={<TransferManagementPage />} />
-        <Route path="/transparency/analytics" element={<MLAnalyticsPage />} />
-        <Route path="/transparency/quality-pricing" element={<QualityPricingPage />} />
-        <Route path="/transparency/qr-codes" element={<QRCodeGeneratorPage />} />
-        <Route path="/transparency/roles" element={<RoleManagementPage />} />
-        <Route path="/transparency/reports" element={<ReportsInsightsPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <>
+              <SignedIn>
+                <Dashboard />
+              </SignedIn>
+              <SignedOut>
+                <RedirectToSignIn redirectUrl={typeof window !== 'undefined' ? window.location.href : '/'} />
+              </SignedOut>
+            </>
+          }
+        />
+        <Route
+          path="/transparency"
+          element={
+            <>
+              <SignedIn>
+                <SupplyChainDashboard />
+              </SignedIn>
+              <SignedOut>
+                <RedirectToSignIn redirectUrl={typeof window !== 'undefined' ? window.location.href : '/'} />
+              </SignedOut>
+            </>
+          }
+        />
+        <Route
+          path="/transparency/legacy"
+          element={
+            <>
+              <SignedIn>
+                <TransparencyPage />
+              </SignedIn>
+              <SignedOut>
+                <RedirectToSignIn redirectUrl={typeof window !== 'undefined' ? window.location.href : '/'} />
+              </SignedOut>
+            </>
+          }
+        />
+        <Route path="/transparency/batch-management" element={<>
+          <SignedIn><BatchManagementPage /></SignedIn>
+          <SignedOut><RedirectToSignIn redirectUrl={typeof window !== 'undefined' ? window.location.href : '/'} /></SignedOut>
+        </>} />
+        <Route path="/transparency/traceability" element={<>
+          <SignedIn><TraceabilityExplorerPage /></SignedIn>
+          <SignedOut><RedirectToSignIn redirectUrl={typeof window !== 'undefined' ? window.location.href : '/'} /></SignedOut>
+        </>} />
+        <Route path="/transparency/transfers" element={<>
+          <SignedIn><TransferManagementPage /></SignedIn>
+          <SignedOut><RedirectToSignIn redirectUrl={typeof window !== 'undefined' ? window.location.href : '/'} /></SignedOut>
+        </>} />
+        <Route path="/transparency/analytics" element={<>
+          <SignedIn><MLAnalyticsPage /></SignedIn>
+          <SignedOut><RedirectToSignIn redirectUrl={typeof window !== 'undefined' ? window.location.href : '/'} /></SignedOut>
+        </>} />
+        <Route path="/transparency/quality-pricing" element={<>
+          <SignedIn><QualityPricingPage /></SignedIn>
+          <SignedOut><RedirectToSignIn redirectUrl={typeof window !== 'undefined' ? window.location.href : '/'} /></SignedOut>
+        </>} />
+        <Route path="/transparency/qr-codes" element={<>
+          <SignedIn><QRCodeGeneratorPage /></SignedIn>
+          <SignedOut><RedirectToSignIn redirectUrl={typeof window !== 'undefined' ? window.location.href : '/'} /></SignedOut>
+        </>} />
+        <Route path="/transparency/roles" element={<>
+          <SignedIn><RoleManagementPage /></SignedIn>
+          <SignedOut><RedirectToSignIn redirectUrl={typeof window !== 'undefined' ? window.location.href : '/'} /></SignedOut>
+        </>} />
+        <Route path="/transparency/reports" element={<>
+          <SignedIn><ReportsInsightsPage /></SignedIn>
+          <SignedOut><RedirectToSignIn redirectUrl={typeof window !== 'undefined' ? window.location.href : '/'} /></SignedOut>
+        </>} />
       </Routes>
     </Router>
   );
