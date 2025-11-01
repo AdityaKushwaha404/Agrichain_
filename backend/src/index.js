@@ -8,15 +8,19 @@ import produceRoutes from './routes/produce.js';
 import blockchainRoutes from './routes/blockchain.js';
 import blockchainActions from './routes/blockchainActions.js';
 import authRoutes from './routes/auth.routes.js'; 
+import transferRoutes from './routes/transferRoutes.js';
+import bodyParser from 'body-parser';
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/roles', rolesRoutes);
 app.use('/api/produce', produceRoutes);
 app.use('/api/blockchain', blockchainRoutes);
+app.use('/api/transfer', transferRoutes);
 
 app.use('/api/ml', mlRoutes);
 
