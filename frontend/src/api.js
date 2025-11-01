@@ -40,3 +40,12 @@ export const aiChat = async ({ messages, batchId, txHash, token }) => {
   );
   return data;
 };
+
+// --- Transfers with payment (Razorpay) ---
+export const createTransferPayment = async ({ amount, batchId, to, noteCID }) => {
+  return axios.post(`${API_BASE}/transfer/create-payment`, { amount, batchId, to, noteCID });
+};
+
+export const verifyTransferPayment = async (payload) => {
+  return axios.post(`${API_BASE}/transfer/verify`, payload);
+};

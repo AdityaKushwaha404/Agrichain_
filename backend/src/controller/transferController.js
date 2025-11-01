@@ -8,18 +8,19 @@ import TempTransfer from '../models/TempTransfer.js';
 
 const key_id = process.env.RAZORPAY_KEY_ID;
 const key_secret = process.env.RAZORPAY_KEY_SECRET;
-const rpcUrl = process.env.RPC_URL;
+const rpcUrl = process.env.RPC_URL || process.env.PROVIDER_URL;
 const privateKey = process.env.PRIVATE_KEY;
 const contractAddress = process.env.CONTRACT_ADDRESS;
 const contractAbiPath = process.env.CONTRACT_ABI_PATH || './contracts/YourContract.json';
 
 const razorpay = createRazorpayInstance(key_id, key_secret);
 
-// load ABI
+// load ABI in ESM-friendly way
 let contractAbi;
 try {
-  const abiJson = require(path.resolve(contractAbiPath));
-  // Support JSON shape: { abi: [...] } or directly [...]
+  const abiPath = path.resolve(contractAbiPath);
+  const raw = fs.readFileSync(abiPath, 'utf-8');
+  const abiJson = JSON.parse(raw);
   contractAbi = abiJson.abi || abiJson;
 } catch (e) {
   console.error('Failed to load contract ABI at', contractAbiPath, e.message);

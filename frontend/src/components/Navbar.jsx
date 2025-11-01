@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
 import BlackboxCopilot from './BlackboxCopilot';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Chatbot from "../Chatbot";
 
 const navLinks = [
 	{ name: "Home", href: "#home", id: 'home' },
@@ -133,13 +134,9 @@ const Navbar = () => {
 						<span className="hero-btn-border absolute inset-0 rounded-full pointer-events-none"></span>
 					</button>
 
-					{/* Ask AI trigger */}
-					<button
-						className="relative font-semibold py-2 px-6 rounded-full border border-emerald-200 text-emerald-800 bg-emerald-50 hover:bg-emerald-100 transition"
-						onClick={() => setCopilotOpen(true)}
-					>
-						Ask AI
-					</button>
+					
+
+					<Chatbot />
 
 					{/* Auth controls */}
 					<SignedOut>

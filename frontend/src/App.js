@@ -23,6 +23,7 @@ import QRCodeDisplay from './components/QRCodeDisplay';
 import PriceQualityForm from './components/PriceQualityForm';
 
 
+
 function Dashboard() {
   const [qrBatchId, setQrBatchId] = useState(null);
   useEffect(() => {
