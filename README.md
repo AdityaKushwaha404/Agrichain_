@@ -2,7 +2,7 @@
 
 **AgriChain** is a blockchain-based agricultural supply chain platform that brings transparency and trust to the process of tracking and verifying agricultural products.
 
-🔗 Live Demo: [https://agri-chain-umber.vercel.app/](https://agri-chain-umber.vercel.app/)
+🔗 Live Demo: [https://agritrace-phi.vercel.app/](https://agritrace-phi.vercel.app/)
 
 ---
 
