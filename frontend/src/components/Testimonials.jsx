@@ -9,7 +9,15 @@ const testimonials = [
 
 const Testimonials = () => {
 	const [current, setCurrent] = useState(0);
+	const [isMobile, setIsMobile] = useState(false);
 	const timeoutRef = useRef(null);
+
+	useEffect(() => {
+		const updateIsMobile = () => setIsMobile(window.innerWidth <= 767);
+		updateIsMobile();
+		window.addEventListener('resize', updateIsMobile);
+		return () => window.removeEventListener('resize', updateIsMobile);
+	}, []);
 
 	useEffect(() => {
 		timeoutRef.current = setTimeout(() => {
@@ -26,8 +34,16 @@ const Testimonials = () => {
 				<h2 className="text-4xl md:text-5xl font-extrabold text-green-800 text-center tracking-tight mb-4">Voices From the Value Chain</h2>
 				<p className="text-center text-gray-600 max-w-2xl mx-auto mb-12 text-lg leading-relaxed">Early adopters highlighting measurable impact in traceability, pricing fairness and consumer confidence.</p>
 				<div className="relative flex items-center justify-center">
-					<div className="w-full flex justify-center relative h-[270px]">
-						{testimonials.map((t, i) => {
+					<div className="w-full flex justify-center relative min-h-[260px] sm:h-[270px]">
+						{isMobile ? (
+							<div className="bg-green-50 rounded-xl shadow p-6 flex flex-col items-center w-full max-w-md">
+								<img src={testimonials[current].img} alt={testimonials[current].name} className="w-20 h-20 rounded-full object-cover border-4 border-white shadow mb-4" />
+								<p className="text-gray-700 italic mb-4 text-center">“{testimonials[current].quote}”</p>
+								<div className="font-semibold text-green-900">{testimonials[current].name}</div>
+								<div className="text-sm text-gray-600">{testimonials[current].role}</div>
+							</div>
+						) : (
+							testimonials.map((t, i) => {
 							let pos = i - current;
 							if (pos < -1) pos += testimonials.length;
 							if (pos > 1) pos -= testimonials.length;
@@ -39,7 +55,8 @@ const Testimonials = () => {
 									<div className="text-sm text-gray-600">{t.role}</div>
 								</div>
 							);
-						})}
+							})
+						)}
 					</div>
 				</div>
 				<div className="flex justify-center gap-2 mt-8">

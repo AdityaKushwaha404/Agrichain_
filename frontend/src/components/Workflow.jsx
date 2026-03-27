@@ -24,7 +24,15 @@ const steps = [
 
 const Workflow = () => {
   const [visible, setVisible] = useState(Array(steps.length).fill(false));
+  const [isMobile, setIsMobile] = useState(false);
   const stepRefs = useRef([]);
+
+  useEffect(() => {
+    const updateIsMobile = () => setIsMobile(window.innerWidth <= 767);
+    updateIsMobile();
+    window.addEventListener('resize', updateIsMobile);
+    return () => window.removeEventListener('resize', updateIsMobile);
+  }, []);
 
   useEffect(() => {
     const observer = new window.IntersectionObserver(
@@ -78,7 +86,7 @@ const Workflow = () => {
                 key={i}
                 ref={el => stepRefs.current[i] = el}
                 data-step={i}
-                className={`flex-1 flex flex-col items-center relative transition-all duration-700 ease-out min-w-[180px] md:min-h-[220px]
+                className={`flex-1 w-full flex flex-col items-center relative transition-all duration-700 ease-out md:min-w-[180px] md:min-h-[220px]
                   ${visible[i]
                     ? 'opacity-100 translate-x-0'
                     : isLeft
@@ -90,7 +98,7 @@ const Workflow = () => {
                   <div
                     className={`flex items-center justify-center w-16 h-16 rounded-full bg-green-700 text-white text-2xl font-bold border-4 border-green-100 shadow-lg transition-transform duration-300 hover:scale-110 hover:shadow-2xl cursor-pointer mb-4 ${bouncingIdx === i ? 'bouncing' : ''}`}
                     style={{
-                      animation: bouncingIdx === i ? 'bounceY 1s cubic-bezier(.77,0,.18,1)' : 'none',
+                      animation: !isMobile && bouncingIdx === i ? 'bounceY 1s cubic-bezier(.77,0,.18,1)' : 'none',
                       boxShadow: '0 6px 24px 0 rgba(34,139,34,0.10)',
                       willChange: 'transform',
                     }}

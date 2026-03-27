@@ -11,12 +11,14 @@ const navLinks = [
 	{ name: "Contact", href: "#contact", id: 'contact' },
 ];
 
-const Navbar = () => {
+const Navbar = ({ onDashboardMenuToggle, showDashboardMenu = false }) => {
 	const [scrolled, setScrolled] = useState(false);
 	const [active, setActive] = useState("Home");
 	const [copilotOpen, setCopilotOpen] = useState(false);
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
+    const isDashboardRoute = location.pathname.startsWith('/transparency');
 
 	useEffect(() => {
 		const onScroll = () => setScrolled(window.scrollY > 20);
@@ -44,8 +46,15 @@ const Navbar = () => {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (isDashboardRoute) {
+			setMobileMenuOpen(false);
+		}
+	}, [isDashboardRoute]);
+
 	const handleNavClick = (name, href, e) => {
 		e.preventDefault();
+		setMobileMenuOpen(false);
 		const id = href.replace('#','');
 		setActive(name);
 		const onHome = location.pathname === '/' || location.pathname === '';
@@ -67,6 +76,7 @@ const Navbar = () => {
 	};
 
 	const handleRipple = (e) => {
+		if (window.innerWidth <= 767) return;
 		const btn = e.currentTarget;
 		const ripple = document.createElement("span");
 		ripple.className = "ripple";
@@ -91,22 +101,22 @@ const Navbar = () => {
 			className={`top-0 z-50 transition-all duration-500 ${
 				scrolled
 					? "fixed inset-x-0 bg-white/55 backdrop-blur-xl shadow-[0_4px_32px_-4px_rgba(0,0,0,0.08)] border-b border-white/30 py-2 supports-[backdrop-filter]:backdrop-saturate-150"
-					: "absolute w-full bg-transparent py-5"
+					: "absolute inset-x-0 bg-transparent py-5"
 			}`}
 			style={{
 				transitionProperty: 'background,backdrop-filter,box-shadow,padding',
 			}}
 		>
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center transition-all duration-500">
-				<div className="flex items-center gap-2 select-none cursor-pointer group focus:outline-none" role="button" tabIndex={0} onClick={handleLogoClick} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleLogoClick(); } }}>
-					<span className="text-2xl mr-1 transition-transform duration-300 group-hover:scale-110 group-active:scale-95">
+			<div className="nav-row max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex justify-between items-center gap-1.5 sm:gap-2 transition-all duration-500">
+				<div className="brand-wrap flex items-center gap-1 sm:gap-2 select-none cursor-pointer group focus:outline-none min-w-0" role="button" tabIndex={0} onClick={handleLogoClick} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleLogoClick(); } }}>
+					<span className="brand-icon text-xl sm:text-2xl mr-0 sm:mr-1 transition-transform duration-300 group-hover:scale-110 group-active:scale-95">
 						<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<circle cx="14" cy="14" r="14" fill="#e0ffe6"/>
 							<path d="M10.5 17.5l7-7" stroke="#22c55e" strokeWidth="2.2" strokeLinecap="round"/>
 							<path d="M13.5 10.5a3 3 0 0 1 4.24 4.24l-2.12 2.12a3 3 0 0 1-4.24-4.24l.7-.7" stroke="#14b8a6" strokeWidth="2.2" strokeLinecap="round"/>
 						</svg>
 					</span>
-					<span className="text-2xl font-extrabold bg-gradient-to-r from-green-600 via-teal-400 to-green-400 bg-clip-text text-transparent tracking-tight transition-transform duration-300 group-hover:scale-105 group-active:scale-95">AgriChain</span>
+					<span className="brand-title text-[1.9rem] sm:text-2xl font-extrabold bg-gradient-to-r from-green-600 via-teal-400 to-green-400 bg-clip-text text-transparent tracking-tight transition-transform duration-300 group-hover:scale-105 group-active:scale-95 truncate">AgriChain</span>
 				</div>
 				<div className="hidden md:flex items-center gap-2">
 					{navLinks.map((link) => (
@@ -125,12 +135,12 @@ const Navbar = () => {
 						</a>
 					))}
 				</div>
-				<div className="ml-4 flex items-center gap-3">
+				<div className="nav-actions ml-1 md:ml-4 flex items-center gap-1.5 md:gap-3 shrink-0">
 					<button
-						className="hero-btn-gradient-border relative font-semibold py-2 px-7 rounded-full shadow-lg transition duration-300 text-white overflow-hidden focus:outline-none text-base scale-100 hover:scale-105"
+						className="hidden md:inline-flex hero-btn-gradient-border relative font-semibold py-2 px-4 sm:px-7 rounded-full shadow-lg transition duration-300 text-white overflow-hidden focus:outline-none text-sm sm:text-base scale-100 hover:scale-105"
 						onClick={(e) => { handleRipple(e); navigate('/transparency'); }}
 					>
-						<span className="relative z-10">Explore Now</span>
+						<span className="relative z-10 whitespace-nowrap">Explore Now</span>
 						<span className="hero-btn-border absolute inset-0 rounded-full pointer-events-none"></span>
 					</button>
 
@@ -144,14 +154,14 @@ const Navbar = () => {
 							<button
 								aria-label="Log in"
 								onClick={handleRipple}
-								className="login-btn relative overflow-hidden rounded-full px-6 py-2 font-semibold text-gray-800 focus:outline-none transition-all duration-300"
+								className="login-btn relative overflow-hidden rounded-full px-3 sm:px-6 py-2 font-semibold text-gray-800 focus:outline-none transition-all duration-300 text-sm sm:text-base"
 							>
 								<span className="relative z-10 flex items-center gap-2">
 									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-80">
 										<path d="M8 10V7a4 4 0 1 1 8 0v3" stroke="#0f766e" strokeWidth="1.8" strokeLinecap="round"/>
 										<rect x="5" y="10" width="14" height="10" rx="3" stroke="#22c55e" strokeWidth="1.8"/>
 									</svg>
-									<span>Log in</span>
+									<span className="login-label whitespace-nowrap leading-none">Log in</span>
 								</span>
 								<span className="login-btn-border absolute inset-0 rounded-full pointer-events-none" />
 								<span className="login-btn-glow absolute inset-0 rounded-full pointer-events-none" />
@@ -161,8 +171,41 @@ const Navbar = () => {
 					<SignedIn>
 						<UserButton afterSignOutUrl="/" appearance={{ elements: { userButtonAvatarBox: 'ring-2 ring-teal-400' } }} />
 					</SignedIn>
+					<button
+						type="button"
+						className="menu-toggle md:hidden p-2 rounded-lg border border-emerald-200 text-emerald-700"
+						onClick={() => {
+							if (isDashboardRoute && showDashboardMenu && onDashboardMenuToggle) {
+								onDashboardMenuToggle();
+								return;
+							}
+							setMobileMenuOpen((prev) => !prev);
+						}}
+						aria-label="Toggle menu"
+						hidden={isDashboardRoute && !showDashboardMenu}
+					>
+						<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+						</svg>
+					</button>
 				</div>
 			</div>
+			{mobileMenuOpen && !isDashboardRoute && (
+				<div className="md:hidden mt-2 mx-4 rounded-2xl border border-emerald-100 bg-white/95 p-2 shadow-sm">
+					{navLinks.map((link) => (
+						<a
+							key={link.name}
+							href={link.href}
+							onClick={(e) => handleNavClick(link.name, link.href, e)}
+							className={`block px-3 py-2 rounded-lg text-sm font-medium ${
+								active === link.name ? 'text-green-700 bg-emerald-50' : 'text-gray-700'
+							}`}
+						>
+							{link.name}
+						</a>
+					))}
+				</div>
+			)}
 			<BlackboxCopilot open={copilotOpen} onClose={() => setCopilotOpen(false)} />
 			<style>{`
 				.nav-link { overflow: hidden; }
@@ -184,6 +227,51 @@ const Navbar = () => {
 				@keyframes btnFillGradientMove { 0% {background-position:0% 50%;} 100% {background-position:100% 50%;} }
 				@keyframes borderGradientMove { 0% {background-position:0% 50%;} 100% {background-position:100% 50%;} }
 				@keyframes rippleEffect { 0% {opacity:.7;width:10px;height:10px;} 80% {opacity:.3;width:120px;height:120px;} 100% {opacity:0;width:160px;height:160px;} }
+				@media (max-width: 767px) {
+					.nav-row {
+						width: 100%;
+						min-width: 0;
+						overflow-x: clip;
+					}
+					.brand-wrap {
+						flex: 1 1 0%;
+						min-width: 0;
+						max-width: 100%;
+					}
+					.brand-title {
+						font-size: 1.6rem;
+						line-height: 1;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+					}
+					.brand-icon {
+						display: none;
+					}
+					.nav-actions {
+						flex: 0 0 auto;
+						gap: 0.375rem;
+					}
+					.login-btn {
+						padding-left: 0.6rem;
+						padding-right: 0.6rem;
+					}
+					.menu-toggle {
+						padding: 0.42rem;
+					}
+					.login-label {
+						display: none;
+					}
+					.hero-btn-gradient-border,
+					.login-btn {
+						box-shadow: none;
+					}
+					.hero-btn-border,
+					.login-btn-border,
+					.login-btn-glow {
+						display: none;
+					}
+				}
 			`}</style>
 		</nav>
 	);

@@ -93,8 +93,8 @@ const ChatBot = () => {
       <style>{`
         .faqbot-fab {
           position: fixed;
-          right: calc(24px + env(safe-area-inset-right, 0px));
-          bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+          right: calc(14px + env(safe-area-inset-right, 0px));
+          bottom: calc(14px + env(safe-area-inset-bottom, 0px));
           width: 56px;
           height: 56px;
           border-radius: 9999px;
@@ -116,10 +116,10 @@ const ChatBot = () => {
 
         .faqbot-panel-wrap {
           position: fixed;
-          right: calc(24px + env(safe-area-inset-right, 0px));
-          bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+          right: calc(8px + env(safe-area-inset-right, 0px));
+          bottom: calc(82px + env(safe-area-inset-bottom, 0px));
           width: 360px;
-          max-width: calc(100vw - 32px);
+          max-width: calc(100vw - 16px);
           z-index: 2147483647;
         }
         .faqbot-enter {
@@ -128,6 +128,35 @@ const ChatBot = () => {
         }
         @keyframes faqbot-pop { from { transform: translateY(8px) scale(.96); } to { transform: translateY(0) scale(1); } }
         @keyframes faqbot-fade { from { opacity: 0 } to { opacity: 1 } }
+
+        @media (max-width: 767px) {
+          .faqbot-fab {
+            display: none !important;
+          }
+          .faqbot-fab {
+            right: 10px !important;
+            bottom: 12px !important;
+            width: 52px;
+            height: 52px;
+          }
+          .faqbot-panel-wrap {
+            right: 8px !important;
+            left: 8px !important;
+            bottom: 70px !important;
+            width: auto;
+            max-width: none;
+          }
+          .faqbot-fab,
+          .faqbot-fab:hover,
+          .faqbot-fab:active {
+            transform: none;
+            box-shadow: 0 8px 16px rgba(20,184,166,0.22);
+          }
+          .faqbot-fab-pulse,
+          .faqbot-enter {
+            animation: none !important;
+          }
+        }
       `}</style>
 
       {/* Floating Chat Window */}

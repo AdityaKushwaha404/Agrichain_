@@ -71,6 +71,11 @@ const LandingPage = () => {
 					@media (min-width: 1024px){ .section-shell{padding-top:5.5rem; padding-bottom:5.5rem;} }
 					.section-separator { position: absolute; left:0; right:0; bottom:0; height:72px; pointer-events:none; background: radial-gradient(ellipse at center, rgba(16,185,129,0.18), transparent 70%); filter: blur(12px); opacity:.65; }
 					#features .section-shell, #benefits .section-shell { padding-top:5rem; padding-bottom:5.5rem; }
+					@media (max-width: 767px){
+						.section-shell {padding-top:2.5rem; padding-bottom:2.5rem;}
+						#features .section-shell, #benefits .section-shell { padding-top:2.75rem; padding-bottom:3rem; }
+						.section-separator { display:none; }
+					}
 				`}</style>
 			</main>
 			<Footer />

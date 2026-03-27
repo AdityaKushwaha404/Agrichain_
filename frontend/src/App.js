@@ -50,6 +50,24 @@ function Dashboard() {
 }
 
 function App() {
+  useEffect(() => {
+    const updateMobileClass = () => {
+      if (window.innerWidth <= 767) {
+        document.body.classList.add('mobile-view');
+      } else {
+        document.body.classList.remove('mobile-view');
+      }
+    };
+
+    updateMobileClass();
+    window.addEventListener('resize', updateMobileClass);
+
+    return () => {
+      window.removeEventListener('resize', updateMobileClass);
+      document.body.classList.remove('mobile-view');
+    };
+  }, []);
+
   return (
     <Router>
       <Routes>

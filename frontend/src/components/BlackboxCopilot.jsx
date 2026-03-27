@@ -35,7 +35,7 @@ export default function BlackboxCopilot({ open, onClose, batchId, txHash }) {
   if (!open) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] w-[360px] sm:w-[420px]">
+    <div className="fixed bottom-3 left-2 right-2 sm:left-auto sm:right-6 sm:bottom-6 z-[100] w-auto sm:w-[420px] max-w-[calc(100vw-1rem)] sm:max-w-[420px]">
       <div className="rounded-2xl shadow-2xl overflow-hidden bg-white/85 backdrop-blur-xl border border-white/50">
         <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-green-600 via-teal-500 to-green-400 text-white">
           <div className="font-semibold">AgriChain Copilot</div>

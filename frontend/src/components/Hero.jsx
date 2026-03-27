@@ -5,10 +5,22 @@ const Hero = () => {
 	const navigate = useNavigate();
 	const [show, setShow] = useState(false);
 	const [donutKey, setDonutKey] = useState(0); // increments to force re-mount of donut for animation replay
+	const [isMobile, setIsMobile] = useState(false);
 	const sectionRef = useRef(null);
 	const snapshotRef = useRef(null);
 
 	useEffect(() => {
+		const updateIsMobile = () => setIsMobile(window.innerWidth <= 767);
+		updateIsMobile();
+		window.addEventListener('resize', updateIsMobile);
+		return () => window.removeEventListener('resize', updateIsMobile);
+	}, []);
+
+	useEffect(() => {
+		if (isMobile) {
+			setShow(true);
+			return;
+		}
 		setShow(false);
 		const observer = new window.IntersectionObserver(
 			([entry]) => {
@@ -26,12 +38,13 @@ const Hero = () => {
 		);
 		if (sectionRef.current) observer.observe(sectionRef.current);
 		return () => observer.disconnect();
-	}, []);
+	}, [isMobile]);
 
 	// Dynamic cursor-based tilt for snapshot card
 	useEffect(() => {
 		const el = snapshotRef.current;
 		if (!el) return;
+		if (isMobile) return;
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; // honor reduced motion
 		let rafId;
 		const donutText = el.querySelector('.donut-text');
@@ -70,28 +83,28 @@ const Hero = () => {
 			el.removeEventListener('pointerleave', reset);
 			cancelAnimationFrame(rafId);
 		};
-	}, []);
+	}, [isMobile]);
 
 	return (
-		<section aria-label="Hero" ref={sectionRef} className="relative overflow-hidden pt-40 pb-28 md:pt-44 md:pb-40 bg-[radial-gradient(circle_at_20%_25%,rgba(16,185,129,0.18),transparent_60%),radial-gradient(circle_at_85%_30%,rgba(45,212,191,0.18),transparent_65%),linear-gradient(to_bottom_right,#f8fff9,#f4fdfb,#fefcf6)]">
+		<section aria-label="Hero" ref={sectionRef} className="relative overflow-hidden pt-28 pb-16 md:pt-44 md:pb-40 bg-[radial-gradient(circle_at_20%_25%,rgba(16,185,129,0.18),transparent_60%),radial-gradient(circle_at_85%_30%,rgba(45,212,191,0.18),transparent_65%),linear-gradient(to_bottom_right,#f8fff9,#f4fdfb,#fefcf6)]">
 			{/* Ambient mesh / gradient shapes */}
-			<div className="pointer-events-none absolute inset-0">
+			<div className="pointer-events-none absolute inset-0 hidden md:block">
 				<div className="absolute -top-32 -left-28 w-[720px] h-[720px] bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-100 rounded-full blur-3xl opacity-50" />
 				<div className="absolute top-1/3 -right-40 w-[640px] h-[640px] bg-gradient-to-br from-amber-100 via-yellow-100 to-lime-100 rounded-full blur-3xl opacity-40" />
 				<div className="absolute bottom-[-260px] left-1/4 w-[780px] h-[780px] bg-gradient-to-br from-teal-100 via-green-100 to-emerald-100 rounded-full blur-3xl opacity-35" />
 				<div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(16,185,129,0.12),transparent_70%)]" />
 			</div>
-			<div className={`relative max-w-7xl mx-auto px-5 md:px-8 transition-all duration-[1100ms] ease-[cubic-bezier(.22,1,.36,1)] ${show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}> 
+			<div className={`relative max-w-7xl mx-auto px-4 md:px-8 transition-all duration-[1100ms] ease-[cubic-bezier(.22,1,.36,1)] ${show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}> 
 				<div className="grid grid-cols-1 lg:grid-cols-12 gap-14 items-center">
 					<div className="relative z-10 lg:col-span-7 flex flex-col items-start text-left">
 						<p className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/70 backdrop-blur text-emerald-700 text-[12px] font-semibold ring-1 ring-emerald-200 mb-6 tracking-wide shadow-sm">
 							<span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Real-Time Produce Integrity
 						</p>
-						<h1 className="text-4xl md:text-6xl xl:text-[4.1rem] font-extrabold leading-[1.05] tracking-tight text-green-900 mb-6">
+						<h1 className="text-[2.5rem] sm:text-5xl md:text-6xl xl:text-[4.1rem] font-extrabold leading-[1.05] tracking-tight text-green-900 mb-6">
 							<span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700">Rebuilding Trust</span><br className="hidden md:block" />
 							Across Agricultural Value Chains
 						</h1>
-						<p className="text-lg md:text-xl text-gray-700/90 leading-relaxed max-w-2xl mb-9">
+						<p className="text-base sm:text-lg md:text-xl text-gray-700/90 leading-relaxed max-w-2xl mb-9">
 							A unified transparency and intelligence layer: cryptographically anchored batches, event-level traceability, ML‑driven pricing insight and consumer QR provenance— accelerating fairness, compliance and brand trust.
 						</p>
 						<div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mb-10">
@@ -120,7 +133,7 @@ const Hero = () => {
 							<li className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-sky-500"/>Consumer QR</li>
 						</ul>
 					</div>
-					<div className="relative lg:col-span-5 flex items-center justify-center">
+					<div className="relative lg:col-span-5 hidden md:flex items-center justify-center">
 						<div ref={snapshotRef} className={`snapshot-card group relative w-full max-w-md aspect-[5/6] rounded-[2.5rem] p-[1px] bg-gradient-to-br from-emerald-400/40 via-teal-400/20 to-emerald-400/0 shadow-xl overflow-hidden transition-all duration-[1100ms] ${show ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}> 
 							<div className="absolute inset-0 bg-gradient-to-br from-white/70 via-white/55 to-white/30 backdrop-blur-xl" />
 							<div className="absolute -top-32 -left-16 w-72 h-72 bg-gradient-to-br from-emerald-200 via-teal-200 to-cyan-100 rounded-full blur-3xl opacity-50 animate-pulse" />
@@ -205,6 +218,13 @@ const Hero = () => {
 					[animation:dash2_1.8s_ease_.4s_forwards] { animation: dash2 1.8s ease .4s forwards; }
 					[animation:dash3_1.8s_ease_.6s_forwards] { animation: dash3 1.8s ease .6s forwards; }
 					[animation:dash4_1.8s_ease_.8s_forwards] { animation: dash4 1.8s ease .8s forwards; }
+					@media (max-width: 767px){
+						section[aria-label="Hero"] .snapshot-card,
+						section[aria-label="Hero"] .donut-wrap,
+						section[aria-label="Hero"] .donut-svg {
+							display: none !important;
+						}
+					}
 				@media (prefers-reduced-motion: reduce){
 					section[aria-label="Hero"] * { animation: none !important; transition: none !important; }
 				}
